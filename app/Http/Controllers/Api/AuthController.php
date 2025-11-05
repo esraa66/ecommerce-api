@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use App\Http\Helpers\ApiResponse; 
 
 class AuthController extends Controller
 {
@@ -24,11 +25,11 @@ class AuthController extends Controller
     {
         $data = $this->auth->register($request->validated());
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User registered successfully.',
-            'data' => $data,
-        ], 201);
+        return ApiResponse::success(
+            $data,
+            'User registered successfully.',
+            201
+        );
     }
 
     /**
@@ -38,11 +39,10 @@ class AuthController extends Controller
     {
         $data = $this->auth->login($request->validated());
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Login successful.',
-            'data' => $data,
-        ]);
+        return ApiResponse::success(
+            $data,
+            'Login successful.'
+        );
     }
 
     /**
@@ -52,10 +52,10 @@ class AuthController extends Controller
     {
         $this->auth->logout($request->user());
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Logout successful.',
-        ]);
+        return ApiResponse::success(
+            null,
+            'Logout successful.'
+        );
     }
 
     /**
@@ -63,9 +63,9 @@ class AuthController extends Controller
      */
     public function profile(Request $request)
     {
-        return response()->json([
-            'status' => true,
-            'data' => $request->user(),
-        ]);
+        return ApiResponse::success(
+            $request->user(),
+            'User profile retrieved successfully.'
+        );
     }
 }
